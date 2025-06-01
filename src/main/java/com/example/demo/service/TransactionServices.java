@@ -29,4 +29,16 @@ public class TransactionServices {
         return transactionRepository.findById(id);
     }
 
+    public Transaction updateTransaction(int id, Transaction updatateTransaction) {
+        return transactionRepository.findById(id)
+                .map(previousTransaction -> {
+                    previousTransaction.setDescription(updatateTransaction.getDescription());
+                    previousTransaction.setCategory(updatateTransaction.getCategory());
+                    previousTransaction.setAmount(updatateTransaction.getAmount());
+                    previousTransaction.setDate(updatateTransaction.getDate());
+                    return transactionRepository.save(previousTransaction);
+                })
+                .orElseThrow(() -> new RuntimeException("Transaction not found"));
+    }
+
 }

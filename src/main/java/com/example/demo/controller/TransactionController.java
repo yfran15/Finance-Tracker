@@ -33,20 +33,7 @@ public class TransactionController {
     // Update transaction
     @PutMapping("/{id}")
     public Transaction updateTransaction(@PathVariable int id, @RequestBody Transaction updatateTransaction) {
-        Optional<Transaction> transactionOptional = transactionServices.getTransactionById(id);
-        if (transactionOptional.isPresent()) {
-            Transaction previousTransaction = transactionOptional.get();
-
-            // Update the fields
-            previousTransaction.setDescription(updatateTransaction.getDescription());
-            previousTransaction.setCategory(updatateTransaction.getCategory());
-            previousTransaction.setAmount(updatateTransaction.getAmount());
-            previousTransaction.setDate(updatateTransaction.getDate());
-            return transactionServices.saveTransaction(previousTransaction);
-        }
-        else {
-            return  null;
-        }
+        return transactionServices.updateTransaction(id, updatateTransaction);
     }
 
     // Delete transaction
