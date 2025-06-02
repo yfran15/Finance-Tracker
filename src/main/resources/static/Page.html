@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Transaction Page</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="transactions-section">
+        <h1>Transactions</h1>
+        <div id="balance"> Balance: $0.00</div>
+
+    <form id="transaction-form">
+        <select id="description">
+            <option value=" income"> Income </option>
+            <option value=" expense"> Expense </option>
+        </select>
+        <input type = "text" id = "category" placeholder="Category" required>
+        <input type = "text" id = "amount" placeholder="Amount" required>
+        <input type = "text" id = "date" placeholder="Date" required>
+        <button type = "submit">  Add Transaction <br></button>
+
+    </form>
+        <ul id ="transaction-list"> </ul>
+    </div>
+    <div>
+        <br>
+        <br>
+    <button onclick="window.location.href='index.html'"> Logout </button>
+    </div>
+<script src = "JScript.js"></script>
+</body>
+</html>

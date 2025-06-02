@@ -1,0 +1,14 @@
+body {
+    background-color: #c0c0c0;
+
+    h1 {
+        color: #001dfd;
+        text-align: center
+    }
+
+    input, select, button {
+        width: 100%;
+        padding: 10px;
+        margin: 5px;
+    }
+}
