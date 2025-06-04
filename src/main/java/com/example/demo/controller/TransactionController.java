@@ -3,13 +3,16 @@ package com.example.demo.controller;
 import com.example.demo.entity.Transaction;
 import com.example.demo.service.TransactionServices;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/transactions")
+@RequestMapping("/transactions")
+//@CrossOrigin(origins = "*")
 public class TransactionController {
     @Autowired
     private TransactionServices transactionServices;
@@ -20,25 +23,44 @@ public class TransactionController {
     }
 
     @GetMapping("/{id}")
-    public Optional<Transaction> getTransactionById(@PathVariable int id) {
-        return transactionServices.getTransactionById(id);
+    public ResponseEntity<Transaction> getTransactionById(@PathVariable Integer id) {
+        return transactionServices.getTransactionById(id)
+                .map(transaction -> new ResponseEntity<>(transaction, HttpStatus.OK))
+                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
+
+//    public Optional<Transaction> getTransactionById(@PathVariable int id) {
+//        return transactionServices.getTransactionById(id);
+//    }
 
     // Create transaction
     @PostMapping
-    public Transaction createTransaction(@RequestBody Transaction transaction) {
-        return transactionServices.saveTransaction(transaction);
+    public ResponseEntity<Transaction> createTransaction(@RequestBody Transaction transaction) {
+        return new ResponseEntity<>(transactionServices.saveTransaction(transaction), HttpStatus.CREATED);
     }
+
+//    public Transaction createTransaction(@RequestBody Transaction transaction) {
+//        return transactionServices.saveTransaction(transaction);
+//    }
 
     // Update transaction
     @PutMapping("/{id}")
-    public Transaction updateTransaction(@PathVariable int id, @RequestBody Transaction updatateTransaction) {
-        return transactionServices.updateTransaction(id, updatateTransaction);
+    public ResponseEntity<Transaction> updateTransaction(@PathVariable Integer id, @RequestBody Transaction updatedTransaction) {
+        return new ResponseEntity<>(transactionServices.updateTransaction(id, updatedTransaction), HttpStatus.OK);
     }
+
+//    public Transaction updateTransaction(@PathVariable int id, @RequestBody Transaction updatateTransaction) {
+//        return transactionServices.updateTransaction(id, updatateTransaction);
+//    }
 
     // Delete transaction
     @DeleteMapping("/{id}")
-    public void deleteTransaction(@PathVariable int id) {
+    public ResponseEntity<Void> deleteTransaction(@PathVariable Integer id) {
         transactionServices.deleteTransaction(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+//    public void deleteTransaction(@PathVariable int id) {
+//        transactionServices.deleteTransaction(id);
+//    }
 }

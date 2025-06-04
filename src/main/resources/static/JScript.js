@@ -74,3 +74,65 @@ async function reset() {
         console.error("Reset error:", error);
     }
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+    const balanceElement = document.getElementById("balance");
+    const transactionForm = document.getElementById("transaction-form");
+    const transactionList = document.getElementById("transaction-list");
+
+    async function fetchTransactions(userId) {
+        const response = await fetch(`/transactions/user/${userId}`);
+        const transactions = await response.json();
+        renderTransactions(transactions);
+        updateBalance(transactions);
+    }
+
+    function updateBalance(transactions) {
+        let balance = transactions.reduce((acc, t) => t.type === "income" ? acc + t.amount : acc - t.amount, 0);
+        balanceElement.textContent = `Balance: $${balance.toFixed(2)}`;
+    }
+
+    function renderTransactions(transactions) {
+        transactionList.innerHTML = "";
+        transactions.forEach((transaction) => {
+            const li = document.createElement("li");
+            li.textContent = `${transaction.date} - ${transaction.category} (${transaction.type}): $${transaction.amount.toFixed(2)}`;
+
+            const deleteBtn = document.createElement("button");
+            deleteBtn.textContent = "Delete";
+            deleteBtn.onclick = async () => {
+                await fetch(`/transactions/${transaction.id}`, { method: "DELETE" });
+                fetchTransactions(transaction.userId);
+            };
+
+            li.appendChild(deleteBtn);
+            transactionList.appendChild(li);
+        });
+    }
+
+    transactionForm.addEventListener("submit", async function (event) {
+        event.preventDefault();
+
+        const userId = 1; // Replace with actual user authentication logic
+        const type = document.getElementById("description").value.trim();
+        const category = document.getElementById("category").value.trim();
+        const amount = parseFloat(document.getElementById("amount").value);
+        const date = document.getElementById("date").value.trim();
+
+        if (!category || isNaN(amount) || !date) {
+            alert("Please enter valid transaction details.");
+            return;
+        }
+
+        await fetch("/transactions", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ userId, type, category, amount, date })
+        });
+
+        fetchTransactions(userId);
+        transactionForm.reset();
+    });
+
+    fetchTransactions(1); // Replace with actual user logic
+});
