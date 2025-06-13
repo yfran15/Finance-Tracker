@@ -54,12 +54,23 @@ async function signup() {
     }
 }
 
-async function reset() {
+async function resetPassword() {
     const username = document.getElementById("reset-username").value;
     const password = document.getElementById("reset-password").value;
+    const confirmPassword = document.getElementById("reset-confirm-password").value;
+
+    if (!username || !password || !confirmPassword) {
+        alert("Please enter username and password.");
+        return;
+    }
+
+    if (password !== password) {
+        alert("Passwords don't match");
+        return;
+    }
 
     try {
-        const response = await fetch("/api/user", {
+        const response = await fetch("/api/user/update-password", {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ username, password }),
@@ -67,6 +78,7 @@ async function reset() {
 
         if (response.ok) {
             alert("Password reset successful");
+            window.location.href = "index.html";
         } else {
             alert("User not found");
         }
@@ -80,11 +92,22 @@ document.addEventListener("DOMContentLoaded", function () {
     const transactionForm = document.getElementById("transaction-form");
     const transactionList = document.getElementById("transaction-list");
 
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (!user) return;
+
+    const userId = user.id;
+
     async function fetchTransactions(userId) {
-        const response = await fetch(`/transactions/user/${userId}`);
-        const transactions = await response.json();
-        renderTransactions(transactions);
-        updateBalance(transactions);
+        try {
+            const response = await fetch(`/transactions/user/${userId}`);
+            if (!response.ok) throw new Error("Load transaction failed");
+            const transactions = await response.json();
+            renderTransactions(transactions);
+            updateBalance(transactions);
+        }
+        catch (error) {
+            console.error("Fetch error:", error);
+        }
     }
 
     function updateBalance(transactions) {
@@ -105,7 +128,18 @@ document.addEventListener("DOMContentLoaded", function () {
                 fetchTransactions(transaction.userId);
             };
 
+            const updateBtn = document.createElement("button");
+            updateBtn.textContent = "Update";
+            updateBtn.onclick =  () => {
+                document.getElementById("description").value = transaction.type;
+                document.getElementById("category").value = transaction.category;
+                document.getElementById("amount").value = transaction.amount;
+                document.getElementById("date").value = transaction.date;
+                transactionForm.dataset.id = transaction.id;
+            }
+
             li.appendChild(deleteBtn);
+            li.appendChild(updateBtn);
             transactionList.appendChild(li);
         });
     }
@@ -119,19 +153,36 @@ document.addEventListener("DOMContentLoaded", function () {
         const amount = parseFloat(document.getElementById("amount").value);
         const date = document.getElementById("date").value.trim();
 
-        if (!category || isNaN(amount) || !date) {
+        if (!type || !category || isNaN(amount) || !date) {
             alert("Please enter valid transaction details.");
             return;
         }
 
-        await fetch("/transactions", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ userId, type, category, amount, date })
-        });
 
-        fetchTransactions(userId);
-        transactionForm.reset();
+        const transactionData = { userId, type, category, amount, date };
+        const editId = transactionForm.dataset.editId;
+
+        try {
+            if (editId) {
+                await fetch(`/transactions/${editId}`, {
+                    method: "PUT",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify(transactionData),
+                });
+                delete transactionForm.dataset.editId;
+            } else {
+                await fetch("/transactions", {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify(transactionData)
+                });
+            }
+
+            fetchTransactions(userId);
+            transactionForm.reset();
+        } catch (error) {
+            console.error("Fetch error:", error);
+        }
     });
 
     fetchTransactions(1); // Replace with actual user logic

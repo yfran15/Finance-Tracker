@@ -18,8 +18,10 @@ public class TransactionController {
     private TransactionServices transactionServices;
 
     @GetMapping("/user/{userId}")
-    public List<Transaction> getTransactionByUserId(@PathVariable int userId) {
-        return transactionServices.getTransactionsByUserId(userId);
+    public ResponseEntity<List<Transaction>> getTransactionByUserId(@PathVariable int userId) {
+        List<Transaction> transactions = transactionServices.getTransactionsByUserId(userId);
+        return new ResponseEntity<>(transactions, HttpStatus.OK);
+        //return transactionServices.getTransactionsByUserId(userId);
     }
 
     @GetMapping("/{id}")
@@ -36,7 +38,8 @@ public class TransactionController {
     // Create transaction
     @PostMapping
     public ResponseEntity<Transaction> createTransaction(@RequestBody Transaction transaction) {
-        return new ResponseEntity<>(transactionServices.saveTransaction(transaction), HttpStatus.CREATED);
+        Transaction created = transactionServices.saveTransaction(transaction);
+        return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
 
 //    public Transaction createTransaction(@RequestBody Transaction transaction) {
@@ -46,7 +49,10 @@ public class TransactionController {
     // Update transaction
     @PutMapping("/{id}")
     public ResponseEntity<Transaction> updateTransaction(@PathVariable Integer id, @RequestBody Transaction updatedTransaction) {
-        return new ResponseEntity<>(transactionServices.updateTransaction(id, updatedTransaction), HttpStatus.OK);
+        return transactionServices.getTransactionById(id)
+                .map(previous -> new ResponseEntity<>(transactionServices.updateTransaction(id, updatedTransaction), HttpStatus.OK))
+                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        //return new ResponseEntity<>(transactionServices.updateTransaction(id, updatedTransaction), HttpStatus.OK);
     }
 
 //    public Transaction updateTransaction(@PathVariable int id, @RequestBody Transaction updatateTransaction) {
