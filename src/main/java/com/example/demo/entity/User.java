@@ -10,15 +10,16 @@ import java.util.List;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
+    private int id;
 
-    private int user_id;
     @Column (unique = true)
     private String username;
     private String password;
 
     //Getter
     public int getId() {
-        return user_id;
+        return id;
     }
 
     public String getUsername() {
@@ -32,7 +33,7 @@ public class User {
 
     // Setter
     public void setId(int id) {
-        this.user_id = user_id;
+        this.id = id;
     }
 
     public void setUsername(String username) {

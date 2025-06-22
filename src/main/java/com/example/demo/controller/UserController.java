@@ -1,7 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.entity.User;
-import com.example.demo.service.UserServices;
+import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,12 +10,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/user")
 public class UserController {
     @Autowired
-    private UserServices userServices;
+    private UserService userService;
 
     @GetMapping("/{username}")
     public ResponseEntity<User> getUser(@PathVariable String username) {
         try{
-            User user = userServices.findByUsername(username);
+            User user = userService.findByUsername(username);
             return ResponseEntity.ok(user);
         } catch (Exception e){
             return ResponseEntity.notFound().build();
@@ -25,10 +25,10 @@ public class UserController {
     // Create a user
     @PostMapping
     public ResponseEntity<User> createUser(@RequestBody User user) {
-        if (userServices.existingUser(user.getUsername())) {
+        if (userService.existingUser(user.getUsername())) {
             return ResponseEntity.badRequest().build();
         }
-        User newUser = userServices.saveUser(user);
+        User newUser = userService.saveUser(user);
         return ResponseEntity.ok(newUser);
     }
 
@@ -36,7 +36,7 @@ public class UserController {
     @PutMapping("/update-password")
     public ResponseEntity<User> updatePassword(@RequestBody User updatedUser) {
         try{
-            User updated = userServices.updatePassword(updatedUser);
+            User updated = userService.updatePassword(updatedUser);
             return ResponseEntity.ok(updated);
         } catch (Exception e){
             return ResponseEntity.notFound().build();

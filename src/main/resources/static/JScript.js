@@ -10,7 +10,7 @@ async function login() {
     }
 
     try {
-        const response = await fetch("/api/user/" + username);
+        const response = await fetch(`/api/user/${username}`);
         if (response.ok) {
             const user = await response.json();
             if (user.password === password) {
@@ -60,11 +60,11 @@ async function resetPassword() {
     const confirmPassword = document.getElementById("reset-confirm-password").value;
 
     if (!username || !password || !confirmPassword) {
-        alert("Please enter username and password.");
+        alert("Please fill all fields.");
         return;
     }
 
-    if (password !== password) {
+    if (password !== confirmPassword) {
         alert("Passwords don't match");
         return;
     }
@@ -93,11 +93,15 @@ document.addEventListener("DOMContentLoaded", function () {
     const transactionList = document.getElementById("transaction-list");
 
     const user = JSON.parse(localStorage.getItem("user"));
-    if (!user) return;
+    if (!user || !user.id) {
+        alert("User not found");
+        window.location.href = "index.html";
+        return;
+    }
 
     const userId = user.id;
 
-    async function fetchTransactions(userId) {
+    async function fetchTransactions() {
         try {
             const response = await fetch(`/transactions/user/${userId}`);
             if (!response.ok) throw new Error("Load transaction failed");
@@ -131,7 +135,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const updateBtn = document.createElement("button");
             updateBtn.textContent = "Update";
             updateBtn.onclick =  () => {
-                document.getElementById("description").value = transaction.type;
+                document.getElementById("description").value = transaction.description;
                 document.getElementById("category").value = transaction.category;
                 document.getElementById("amount").value = transaction.amount;
                 document.getElementById("date").value = transaction.date;
@@ -147,20 +151,20 @@ document.addEventListener("DOMContentLoaded", function () {
     transactionForm.addEventListener("submit", async function (event) {
         event.preventDefault();
 
-        const userId = 1; // Replace with actual user authentication logic
-        const type = document.getElementById("description").value.trim();
+        //const userId = 1; // Replace with actual user authentication logic
+        const description = document.getElementById("description").value.trim();
         const category = document.getElementById("category").value.trim();
         const amount = parseFloat(document.getElementById("amount").value);
         const date = document.getElementById("date").value.trim();
 
-        if (!type || !category || isNaN(amount) || !date) {
+        if (!description || !category || isNaN(amount) || !date) {
             alert("Please enter valid transaction details.");
             return;
         }
 
 
-        const transactionData = { userId, type, category, amount, date };
-        const editId = transactionForm.dataset.editId;
+        const transactionData = { description, category, amount, date, user:{id: userId} };
+        const editId = transactionForm.dataset.id;
 
         try {
             if (editId) {
@@ -169,7 +173,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     headers: {"Content-Type": "application/json"},
                     body: JSON.stringify(transactionData),
                 });
-                delete transactionForm.dataset.editId;
+                delete transactionForm.dataset.id;
             } else {
                 await fetch("/transactions", {
                     method: "POST",
@@ -178,12 +182,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 });
             }
 
-            fetchTransactions(userId);
+            fetchTransactions();
             transactionForm.reset();
         } catch (error) {
             console.error("Fetch error:", error);
         }
     });
 
-    fetchTransactions(1); // Replace with actual user logic
+    fetchTransactions();
 });

@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class TransactionServices {
+public class TransactionService {
     @Autowired
     private TransactionRepository transactionRepository;
 

@@ -1,5 +1,6 @@
 package com.example.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,6 +19,8 @@ public class Transaction {
     private String description;
     private String category;
     private double amount;
+
+    @JsonFormat(pattern ="MM/dd/yyyy")
     private LocalDate date;
 
     public int getId() {
@@ -64,4 +67,12 @@ public class Transaction {
     @ManyToOne
     @JoinColumn(name ="user_id", nullable = false)
     private User user;
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 }
