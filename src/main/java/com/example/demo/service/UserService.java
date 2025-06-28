@@ -12,7 +12,7 @@ public class UserService {
 
     public User findByUsername (String username){
         return userRepository.findByUsername(username)
-                .orElseThrow(() ->new RuntimeException("user not found"));
+                .orElseThrow(() ->new IllegalArgumentException("user not found"));
     }
 
     public boolean existingUser (String username) {
@@ -27,5 +27,9 @@ public class UserService {
         User existing = findByUsername(updateUser.getUsername());
         existing.setPassword(updateUser.getPassword());
         return userRepository.save(existing);
+    }
+    public User findById(Integer id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found with ID: " + id));
     }
 }

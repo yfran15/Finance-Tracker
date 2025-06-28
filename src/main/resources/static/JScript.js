@@ -115,15 +115,27 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function updateBalance(transactions) {
-        let balance = transactions.reduce((acc, t) => t.type === "income" ? acc + t.amount : acc - t.amount, 0);
+        const balance = transactions.reduce((acc, t) => {
+            if (t.description === "income"){
+                return acc + t.amount;
+            }
+            else{
+                return acc - t.amount;
+            }
+        }, 0);
         balanceElement.textContent = `Balance: $${balance.toFixed(2)}`;
+
+        // Balance alert
+        if (balance < 100.00){
+            alert("Your balance is less than 100.00");
+        }
     }
 
     function renderTransactions(transactions) {
         transactionList.innerHTML = "";
         transactions.forEach((transaction) => {
             const li = document.createElement("li");
-            li.textContent = `${transaction.date} - ${transaction.category} (${transaction.type}): $${transaction.amount.toFixed(2)}`;
+            li.textContent = `${transaction.date} - ${transaction.category} (${transaction.description}): $${transaction.amount.toFixed(2)}`;
 
             const deleteBtn = document.createElement("button");
             deleteBtn.textContent = "Delete";

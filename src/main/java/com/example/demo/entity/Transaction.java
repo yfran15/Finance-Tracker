@@ -1,5 +1,6 @@
 package com.example.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -66,6 +67,7 @@ public class Transaction {
     // Map the transaction to the user
     @ManyToOne
     @JoinColumn(name ="user_id", nullable = false)
+    @JsonBackReference
     private User user;
 
     public User getUser() {

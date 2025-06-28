@@ -45,7 +45,7 @@ public class TransactionController {
         if (transaction.getUser() == null || transaction.getUser().getId() == 0) {
             return ResponseEntity.badRequest().body(null);}
         // validate user
-        User user = userService.findByUsername(transaction.getUser().getUsername());
+        User user = userService.findById(transaction.getUser().getId());
         transaction.setUser(user);
 
         Transaction created = transactionService.saveTransaction(transaction);
