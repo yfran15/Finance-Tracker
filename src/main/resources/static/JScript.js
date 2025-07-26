@@ -59,6 +59,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             const deleteBtn = document.createElement("button");
             deleteBtn.textContent = "Delete";
+            deleteBtn.className = "deleteBtn";
             deleteBtn.onclick = async () => {
                 await fetch(`/transactions/${transaction.id}`, { method: "DELETE" });
                 fetchTransactions(transaction.userId);
@@ -66,6 +67,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             const updateBtn = document.createElement("button");
             updateBtn.textContent = "Update";
+            updateBtn.className = "updateBtn";
             updateBtn.onclick =  () => {
                 document.getElementById("description").value = transaction.description;
                 document.getElementById("category").value = transaction.category;

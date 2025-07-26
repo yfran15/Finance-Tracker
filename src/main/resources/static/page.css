@@ -1,0 +1,62 @@
+h1{
+    color: #4B1A1A;
+    font-weight: bold;
+}
+#balance{
+    font-weight: bold;
+    font-size: large;
+    margin-bottom: 20px;
+}
+#transaction-form{
+    font-weight: lighter;
+    font-size: large;
+    margin-bottom: 20px;
+}
+#transaction-form select,
+#transaction-form input{
+    font-size: medium;
+    font-weight: normal;
+    font-family: Verdana;
+    padding: 1px;
+    color: #4B1A1A;
+    background: #f5e1ff;
+    border: 2px solid #4B1A1A;
+}
+
+button{
+    border: 2px solid #4B1A1A;
+    font-weight: bold;
+    font-size: large;
+    font-family: 'Courier New', Courier, monospace;
+    color: #4B1A1A;
+    background-color: #e0c7c7;
+}
+button:hover{
+    background-color: #d18b8b;
+    color: white;
+}
+#transaction-list{
+    font-family: "JetBrains Mono", monospace;
+    font-weight: lighter;
+    font-size: large;
+}
+*{background-color: #f2e9f6
+;}
+
+#transaction-list li{
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+.deleteBtn,
+.updateBtn {
+    background-color: #4B1A1A;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    font-weight: bold;
+    font-family: 'Courier New', Courier, monospace;
+    cursor: pointer;
+    margin-left: 10px;
+}
