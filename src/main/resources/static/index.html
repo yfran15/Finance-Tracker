@@ -3,33 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <title>Finance Tracker</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="index.css">
 </head>
 <body>
 <div>
     <h1>Welcome to Finance Tracker</h1>
 </div>
-    <div>
+<br>
+<br>
+<p>Many people struggle to monitor their spending until they exceed their budget, often due to a lack of awareness of their financial habits. Without real-time tracking, budget planning, or alerts, it’s hard to see where money is going, leading to poor financial decisions.
+    This Finance Tracker web application will allow users to record their income and expenses and analyze spending trends. It will also provide budget notifications, helping users make informed financial choices, avoid impulse spending, and gain better control over their finances.</p>
+
+<br>
+<div class="container">
+    <div id="logged-in">
         <h2> Login </h2>
         <input type="text" placeholder="Username" name="username" id="login-username">
         <input type="password" placeholder="Password" name="password" id="login-password">
         <button onclick="login()">Login</button>
     </div>
 
-    <div>
+
+    <br>
+    <br>
+    <div id="registered-user">
         <h2> Sign Up </h2>
         <input type = "text" placeholder="Username" name="sign_up_username" id="signup-username">
         <input type = "password" placeholder="Password" name="sign_up_password" id="signup-password">
         <button onclick="signup()">Sign Up</button>
     </div>
 
-    <div>
+    <div id="password">
         <br>
         <br>
         <br>
         <button onclick="window.location.href='reset.html'"> Forgot Password </button>
 
     </div>
+</div>
 <script src = "login.js"> </script>
 </body>
 </html>

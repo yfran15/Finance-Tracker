@@ -1,0 +1,54 @@
+h1{text-align: center;
+    color: #4B1A1A;
+
+}
+h2{
+    text-align: left;
+    color: #333333;
+}
+p{
+    text-align: left;
+    color: #5C1A1A;
+    font-style: italic;
+    font-size: larger;
+}
+
+input{
+    border: 2px solid #4B1A1A;
+    font-size: medium;
+    padding: 1px;
+    color: #4B1A1A;
+    background-color: #fefefe;
+}
+input:focus{
+    border: 2px solid #803030;
+}
+button{
+    border: 2px solid #4B1A1A;
+    font-weight: bold;
+    font-size: large;
+    font-family: 'Courier New', Courier, monospace;
+    color: #4B1A1A;
+    background-color: #e0c7c7;
+}
+button:hover{
+    background-color: #d18b8b;
+    color: white;
+}
+.container{
+    display: flex;
+    flex-direction: column;
+    margin-top: 50px;
+}
+* {
+    background-color: #f5e1ff;
+    background-image: url("https://www.wikihow.com/images/thumb/8/80/Keep-Track-of-Your-Personal-Finances-Step-10.jpg/v4-460px-Keep-Track-of-Your-Personal-Finances-Step-10.jpg");
+    background-repeat: no-repeat;
+    background-size: 600px;
+    background-attachment: fixed;
+    background-position: right 20px bottom 50px;
+}
+*{
+    margin: 5px;
+
+}
